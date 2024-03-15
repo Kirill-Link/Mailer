@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% if email %}
+<div class="mail__inner">
+    <p><strong>Subject:</strong> {{ email.subject }}</p>
+    <p><strong>From:</strong> {{ email.from }}</p>
+    <p><strong>Date:</strong> {{ email.date }}</p>
+    <p><strong>Body:</strong> {{ email.body|safe }}</p>
+</div>
+{% else %}
+<p>No email found</p>
+{% endif %}
+{% endblock %}

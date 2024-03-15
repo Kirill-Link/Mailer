@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<div class="center__content">
+    <div class="tab">
+        <button class="tablinks active" onclick="openCity(event, 'mails')">Письма</button>
+        <button class="tablinks" onclick="openCity(event, 'filters')">Фильтры</button>
+    </div>
+
+
+    <div id="mails" class="tabcontent" style="display: block;">
+        <div class="inbox__mails">
+            <h2 class="form_title">Входящие (10 писем)</h2>
+            <ul class="mail__box">
+                {% for email in last_mail %}
+                <li>
+                    <p class="mail_id"><strong>ID: </strong> {{ email.id }}</p>
+                    <!-- <p class="mail_subject"><strong>Тема: </strong> {{ email.subject }}</p> -->
+                    <p class="mail_from"><strong>От :</strong> {{ email.from }}</p>
+                    <p class="mail_date"><strong>Дата :</strong> {{ email.date }}</p>
+                    <p class="mail_email"><strong><a href="{% url 'detail' email.id %}">Открыть письмо</a></strong></p>
+                    <p class="mail_email">
+                        <button type="button" class="create__filltre__modal" data-bs-toggle="modal"
+                                data-bs-target="#staticBackdrop" data-email="{{ email.from }}">
+                            Создать фильтр
+                        </button>
+
+                    </p>
+                    <!-- Другие необходимые поля можно добавить -->
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div id="filters" class="tabcontent">
+        <p>Фильтры</p>
+    </div>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Создание фильтра</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="post" action="{% url 'main' %}">
+            {% csrf_token %}
+
+            <div class="form__items">
+                <div class="form__item">
+                    <label for="name">Название фильтра:</label>
+                    <input type="text" name="name" id="name">
+                </div>
+
+                <div class="form__item">
+                    <label for="id_field1">Родительская папка:</label>
+                    <select name="parent_folder" id="id_field1">
+                        {% for item in parent_folders %}
+                            <option value="{{ item }}">{{ item }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form__item">
+                    <label for="folder">Клиентская папка:</label>
+                    <input type="text" name="folder" id="folder">
+                </div>
+
+                <div class="form__item">
+                    <label for="email">Email:</label>
+                    <input type="text" name="email" class="email-input" id="email" >
+                </div>
+            </div>
+
+            <button class="form__btn" type="submit">Создать фильтр</button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Understood</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
+
+
